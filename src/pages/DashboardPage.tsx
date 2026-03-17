@@ -1,5 +1,7 @@
 import { ScoreCircle } from '@/components/ScoreCircle';
 import { BrainlyAvatar } from '@/components/BrainlyAvatar';
+import { DailyRewards } from '@/components/DailyRewards';
+import { QuestionOfTheDay } from '@/components/QuestionOfTheDay';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
 import { Battery, Brain, Zap, TrendingUp, Share2 } from 'lucide-react';
@@ -46,7 +48,11 @@ export function DashboardPage() {
         <Brain className="h-3.5 w-3.5" />
         Today · BrainScore Card
       </div>
-      
+
+      {/* Daily Rewards */}
+      <DailyRewards />
+
+      {/* Score Card */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-lg">
         <div className="flex items-center gap-5">
           <ScoreCircle />
@@ -55,7 +61,7 @@ export function DashboardPage() {
               <span className="gradient-accent rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-accent-foreground">{currentTier.name}</span>
               <span className="text-[10px] font-display font-bold text-muted-foreground">{currentTier.multiplier}</span>
             </div>
-            
+
             <div>
               <div className="flex items-center justify-between text-[10px] uppercase text-muted-foreground mb-1">
                 <span>Cognitive Battery</span>
@@ -94,7 +100,7 @@ export function DashboardPage() {
             <p className="text-[10px] text-muted-foreground mt-1">{nextTier.min - brainScore} points to next tier</p>
           )}
         </div>
-        
+
         <div className="mt-4 rounded-xl border border-border bg-secondary p-3">
           <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
             <Zap className="h-3 w-3" /> Focus Intel
@@ -110,7 +116,7 @@ export function DashboardPage() {
             }
           </p>
         </div>
-        
+
         <div className="mt-4 flex gap-2 flex-wrap">
           <button onClick={resetDay} className="rounded-full border border-border px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">
             New Day
@@ -123,7 +129,10 @@ export function DashboardPage() {
           </button>
         </div>
       </div>
-      
+
+      {/* Question of the Day */}
+      <QuestionOfTheDay />
+
       {/* All Tiers */}
       <div className="rounded-2xl border border-border bg-card p-4">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-3">Brain Level Tiers</div>
@@ -151,7 +160,7 @@ export function DashboardPage() {
         <BrainlyAvatar size={56} />
         <div>
           <span className="font-display text-sm font-bold tracking-wider text-accent">{brainLevel}</span>
-          <p className="text-xs text-muted-foreground mt-0.5">Tap Brainly to chat. Unlock outfits in the Outfitter!</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Tap Brainly to chat with AI. Unlock outfits in the Outfitter!</p>
         </div>
       </div>
     </div>
