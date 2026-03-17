@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_rewards: {
+        Row: {
+          claimed_date: string
+          created_at: string
+          id: string
+          points_awarded: number
+          streak_count: number
+          user_id: string
+        }
+        Insert: {
+          claimed_date?: string
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          streak_count?: number
+          user_id: string
+        }
+        Update: {
+          claimed_date?: string
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          streak_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -23,8 +50,11 @@ export type Database = {
           display_name: string | null
           gauntlet_high_score: number
           id: string
+          last_login_date: string | null
+          login_streak: number
           peak_score: number
           selected_outfit: string
+          selected_subject: string
           selected_theme: string
           updated_at: string
           user_id: string
@@ -38,8 +68,11 @@ export type Database = {
           display_name?: string | null
           gauntlet_high_score?: number
           id?: string
+          last_login_date?: string | null
+          login_streak?: number
           peak_score?: number
           selected_outfit?: string
+          selected_subject?: string
           selected_theme?: string
           updated_at?: string
           user_id: string
@@ -53,12 +86,42 @@ export type Database = {
           display_name?: string | null
           gauntlet_high_score?: number
           id?: string
+          last_login_date?: string | null
+          login_streak?: number
           peak_score?: number
           selected_outfit?: string
+          selected_subject?: string
           selected_theme?: string
           updated_at?: string
           user_id?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      qotd_responses: {
+        Row: {
+          created_at: string
+          id: string
+          points_awarded: number
+          question_date: string
+          user_id: string
+          was_correct: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          question_date?: string
+          user_id: string
+          was_correct?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          points_awarded?: number
+          question_date?: string
+          user_id?: string
+          was_correct?: boolean
         }
         Relationships: []
       }
@@ -97,6 +160,7 @@ export type Database = {
           brain_score: number | null
           display_name: string | null
           id: string | null
+          login_streak: number | null
           peak_score: number | null
           selected_outfit: string | null
           user_id: string | null
@@ -107,6 +171,7 @@ export type Database = {
           brain_score?: number | null
           display_name?: string | null
           id?: string | null
+          login_streak?: number | null
           peak_score?: number | null
           selected_outfit?: string | null
           user_id?: string | null
@@ -117,6 +182,7 @@ export type Database = {
           brain_score?: number | null
           display_name?: string | null
           id?: string | null
+          login_streak?: number | null
           peak_score?: number | null
           selected_outfit?: string | null
           user_id?: string | null
