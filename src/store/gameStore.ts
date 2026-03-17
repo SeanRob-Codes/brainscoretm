@@ -64,6 +64,7 @@ interface GameStore {
   // Helpers
   resetDay: () => void;
   getUnlockedOutfits: () => OutfitId[];
+  syncFromCloud: (score: number, peak: number, gauntletHigh: number) => void;
 }
 
 function getBrainLevel(score: number): string {
