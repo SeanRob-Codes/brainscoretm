@@ -38,6 +38,7 @@ export function useProfileSync() {
   useEffect(() => {
     if (!user) return;
     const timeout = setTimeout(() => {
+      const today = new Date().toISOString().split('T')[0];
       supabase.from('profiles').update({
         selected_theme: store.theme,
         selected_outfit: store.selectedOutfit,
@@ -45,6 +46,7 @@ export function useProfileSync() {
         brain_score: store.brainScore,
         peak_score: store.peakScore,
         gauntlet_high_score: store.gauntletHighScore,
+        last_login_date: today,
       }).eq('user_id', user.id).then(() => {});
     }, 1000);
     return () => clearTimeout(timeout);
