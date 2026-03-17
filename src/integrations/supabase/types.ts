@@ -14,10 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          brain_score: number
+          brainly_enabled: boolean
+          created_at: string
+          display_name: string | null
+          gauntlet_high_score: number
+          id: string
+          peak_score: number
+          selected_outfit: string
+          selected_theme: string
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          brain_score?: number
+          brainly_enabled?: boolean
+          created_at?: string
+          display_name?: string | null
+          gauntlet_high_score?: number
+          id?: string
+          peak_score?: number
+          selected_outfit?: string
+          selected_theme?: string
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          brain_score?: number
+          brainly_enabled?: boolean
+          created_at?: string
+          display_name?: string | null
+          gauntlet_high_score?: number
+          id?: string
+          peak_score?: number
+          selected_outfit?: string
+          selected_theme?: string
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      score_history: {
+        Row: {
+          brain_score: number
+          created_at: string
+          game_results: Json
+          games_played: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          brain_score: number
+          created_at?: string
+          game_results?: Json
+          games_played?: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          brain_score?: number
+          created_at?: string
+          game_results?: Json
+          games_played?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          brain_score: number | null
+          display_name: string | null
+          id: string | null
+          peak_score: number | null
+          selected_outfit: string | null
+          user_id: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          brain_score?: number | null
+          display_name?: string | null
+          id?: string | null
+          peak_score?: number | null
+          selected_outfit?: string | null
+          user_id?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          brain_score?: number | null
+          display_name?: string | null
+          id?: string | null
+          peak_score?: number | null
+          selected_outfit?: string | null
+          user_id?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never
