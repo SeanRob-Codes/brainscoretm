@@ -10,13 +10,16 @@ import { HistoryPage } from './HistoryPage';
 import { PlusPage } from './PlusPage';
 import { SettingsPage } from './SettingsPage';
 import { useGameStore } from '@/store/gameStore';
+import { useProfileSync } from '@/hooks/useProfile';
 
 export default function Index() {
   const [tab, setTab] = useState<TabId>('dashboard');
   const [brainlyOpen, setBrainlyOpen] = useState(false);
   const { theme, brainlyEnabled } = useGameStore();
 
-  // Apply theme class to root
+  // Sync profile with cloud
+  useProfileSync();
+
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('theme-cyan', 'theme-purple');
@@ -24,7 +27,6 @@ export default function Index() {
     if (theme === 'purple') root.classList.add('theme-purple');
   }, [theme]);
 
-  // Scroll to top on tab change
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [tab]);
@@ -42,7 +44,6 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-md">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
@@ -57,18 +58,13 @@ export default function Index() {
         </div>
       </header>
 
-      {/* Content */}
       <main className="px-4 pb-24 pt-4">
         {renderPage()}
       </main>
 
-      {/* Bottom Nav */}
       <BottomNav active={tab} onTabChange={setTab} />
-
-      {/* Scroll to top FAB */}
       <ScrollToTop />
 
-      {/* Brainly toggle + panel */}
       {brainlyEnabled && (
         <>
           <button

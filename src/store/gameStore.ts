@@ -64,6 +64,7 @@ interface GameStore {
   // Helpers
   resetDay: () => void;
   getUnlockedOutfits: () => OutfitId[];
+  syncFromCloud: (score: number, peak: number, gauntletHigh: number) => void;
 }
 
 function getBrainLevel(score: number): string {
@@ -117,6 +118,12 @@ export const useGameStore = create<GameStore>()(
       gauntletHighScore: 0,
       setGauntletHighScore: (s) => set({ gauntletHighScore: Math.max(s, get().gauntletHighScore) }),
       resetDay: () => set({ gameResults: [], brainScore: 500, brainLevel: 'Smooth Brain' }),
+      syncFromCloud: (score, peak, gauntletHigh) => set({
+        brainScore: score,
+        peakScore: peak,
+        brainLevel: getBrainLevel(score),
+        gauntletHighScore: Math.max(gauntletHigh, get().gauntletHighScore),
+      }),
       getUnlockedOutfits: () => {
         const peak = get().peakScore;
         return OUTFITS.filter(o => peak >= o.requiredScore).map(o => o.id);
