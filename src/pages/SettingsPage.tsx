@@ -1,5 +1,6 @@
 import { useGameStore, type ThemeColor } from '@/store/gameStore';
-import { Settings, Palette, Bot, Share2, Shirt } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Settings, Palette, Bot, Share2, Shirt, LogOut, User } from 'lucide-react';
 import { useState } from 'react';
 import { OutfitSelector } from '@/components/OutfitSelector';
 
@@ -10,13 +11,14 @@ const THEMES: { id: ThemeColor; label: string }[] = [
 ];
 
 export function SettingsPage() {
-  const { theme, setTheme, brainlyEnabled, setBrainlyEnabled, brainScore, brainLevel } = useGameStore();
+  const { theme, setTheme, brainlyEnabled, setBrainlyEnabled, brainScore, brainLevel, peakScore } = useGameStore();
+  const { user, signOut } = useAuth();
   const [outfitOpen, setOutfitOpen] = useState(false);
 
   const shareScore = () => {
-    const text = `My BrainScore is ${brainScore} (${brainLevel})! Train your brain at BrainScore™ 🧠`;
+    const text = `🧠 My BrainScore is ${brainScore} (${brainLevel})! Peak: ${peakScore}\nTrain your brain at BrainScore™\nhttps://brainscoretm.lovable.app`;
     if (navigator.share) {
-      navigator.share({ title: 'BrainScore™', text });
+      navigator.share({ title: 'BrainScore™', text, url: 'https://brainscoretm.lovable.app' });
     } else {
       navigator.clipboard.writeText(text);
     }
@@ -29,6 +31,25 @@ export function SettingsPage() {
         Settings
       </div>
       
+      {/* Account */}
+      <div className="rounded-xl border border-border bg-card p-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full gradient-accent">
+            <User className="h-5 w-5 text-accent-foreground" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="font-display text-xs font-bold tracking-wider block truncate">{user?.email}</span>
+            <span className="text-[10px] text-muted-foreground">Peak Score: {peakScore}</span>
+          </div>
+          <button
+            onClick={signOut}
+            className="rounded-full border border-destructive/30 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-destructive hover:bg-destructive/10 transition-all flex items-center gap-1"
+          >
+            <LogOut className="h-3 w-3" /> Sign Out
+          </button>
+        </div>
+      </div>
+
       {/* Theme */}
       <div className="rounded-xl border border-border bg-card p-4 space-y-3">
         <div className="flex items-center gap-2">
@@ -95,8 +116,8 @@ export function SettingsPage() {
           <div className="flex items-center gap-2">
             <Share2 className="h-4 w-4 text-accent" />
             <div>
-              <span className="font-display text-xs font-bold tracking-wider">Share</span>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Share your current BrainScore</p>
+              <span className="font-display text-xs font-bold tracking-wider">Share with Friends</span>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Share your BrainScore & tier</p>
             </div>
           </div>
           <button
