@@ -1,13 +1,13 @@
-import { Home, Gamepad2, Flame, BarChart3, Star, Settings } from 'lucide-react';
+import { Home, Gamepad2, Flame, Trophy, Users, Settings } from 'lucide-react';
 
-export type TabId = 'dashboard' | 'games' | 'gauntlet' | 'history' | 'plus' | 'settings';
+export type TabId = 'dashboard' | 'games' | 'gauntlet' | 'leaderboard' | 'social' | 'settings';
 
 const tabs: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'dashboard', label: 'Home', icon: Home },
   { id: 'games', label: 'Games', icon: Gamepad2 },
   { id: 'gauntlet', label: 'Gauntlet', icon: Flame },
-  { id: 'history', label: 'History', icon: BarChart3 },
-  { id: 'plus', label: 'Plus', icon: Star },
+  { id: 'leaderboard', label: 'Ranks', icon: Trophy },
+  { id: 'social', label: 'Social', icon: Users },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 

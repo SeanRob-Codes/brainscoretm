@@ -6,8 +6,8 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import { DashboardPage } from './DashboardPage';
 import { GamesPage } from './GamesPage';
 import { GauntletPage } from './GauntletPage';
-import { HistoryPage } from './HistoryPage';
-import { PlusPage } from './PlusPage';
+import { LeaderboardPage } from './LeaderboardPage';
+import { SocialPage } from './SocialPage';
 import { SettingsPage } from './SettingsPage';
 import { useGameStore } from '@/store/gameStore';
 import { useProfileSync } from '@/hooks/useProfile';
@@ -17,7 +17,6 @@ export default function Index() {
   const [brainlyOpen, setBrainlyOpen] = useState(false);
   const { theme, brainlyEnabled } = useGameStore();
 
-  // Sync profile with cloud
   useProfileSync();
 
   useEffect(() => {
@@ -36,8 +35,8 @@ export default function Index() {
       case 'dashboard': return <DashboardPage />;
       case 'games': return <GamesPage />;
       case 'gauntlet': return <GauntletPage />;
-      case 'history': return <HistoryPage />;
-      case 'plus': return <PlusPage />;
+      case 'leaderboard': return <LeaderboardPage />;
+      case 'social': return <SocialPage />;
       case 'settings': return <SettingsPage />;
     }
   };
