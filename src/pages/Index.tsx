@@ -8,6 +8,7 @@ import { GamesPage } from './GamesPage';
 import { GauntletPage } from './GauntletPage';
 import { LeaderboardPage } from './LeaderboardPage';
 import { SocialPage } from './SocialPage';
+import { PlusPage } from './PlusPage';
 import { SettingsPage } from './SettingsPage';
 import { useGameStore } from '@/store/gameStore';
 import { useProfileSync } from '@/hooks/useProfile';
@@ -37,6 +38,7 @@ export default function Index() {
       case 'gauntlet': return <GauntletPage />;
       case 'leaderboard': return <LeaderboardPage />;
       case 'social': return <SocialPage />;
+      case 'plus': return <PlusPage />;
       case 'settings': return <SettingsPage />;
     }
   };

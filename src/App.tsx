@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { AuthPage } from "./pages/AuthPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { Loader2 } from "lucide-react";
@@ -22,14 +23,17 @@ function AppRoutes() {
     );
   }
 
-  if (!user) {
-    return <AuthPage />;
-  }
-
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="*" element={<NotFound />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      {!user ? (
+        <Route path="*" element={<AuthPage />} />
+      ) : (
+        <>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </>
+      )}
     </Routes>
   );
 }
