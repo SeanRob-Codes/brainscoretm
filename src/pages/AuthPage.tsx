@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { Brain, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { ForgotPasswordPage } from './ForgotPasswordPage';
 
 export function AuthPage() {
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -12,6 +13,10 @@ export function AuthPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
+
+  if (mode === 'forgot') {
+    return <ForgotPasswordPage onBack={() => setMode('login')} />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +40,6 @@ export function AuthPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm space-y-6">
-        {/* Logo */}
         <div className="flex flex-col items-center gap-3">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl gradient-accent glow-accent">
             <Brain className="h-8 w-8 text-accent-foreground" />
@@ -44,7 +48,6 @@ export function AuthPage() {
           <p className="text-xs text-muted-foreground text-center">Train your brain. Track your score. Level up.</p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-card p-6 space-y-4">
           <h2 className="font-display text-sm font-bold tracking-wider text-center uppercase">
             {mode === 'login' ? 'Log In' : 'Create Account'}
@@ -90,15 +93,17 @@ export function AuthPage() {
                 className="w-full rounded-xl border border-border bg-background px-4 py-3 pr-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
                 autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               />
-              <button
-                type="button"
-                onClick={() => setShowPw(!showPw)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              >
+              <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
                 {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
           </div>
+
+          {mode === 'login' && (
+            <button type="button" onClick={() => setMode('forgot')} className="block w-full text-right text-[11px] text-accent hover:underline">
+              Forgot password?
+            </button>
+          )}
 
           {error && <p className="text-xs text-destructive text-center">{error}</p>}
           {success && <p className="text-xs text-success text-center">{success}</p>}
@@ -113,7 +118,6 @@ export function AuthPage() {
           </button>
         </form>
 
-        {/* Toggle */}
         <p className="text-center text-xs text-muted-foreground">
           {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
           <button
