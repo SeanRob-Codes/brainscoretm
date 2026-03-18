@@ -41,6 +41,54 @@ export type Database = {
         }
         Relationships: []
       }
+      follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      friendships: {
+        Row: {
+          addressee_id: string
+          created_at: string
+          id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          addressee_id: string
+          created_at?: string
+          id?: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          addressee_id?: string
+          created_at?: string
+          id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -50,6 +98,8 @@ export type Database = {
           display_name: string | null
           gauntlet_high_score: number
           id: string
+          is_plus: boolean
+          last_active_at: string | null
           last_login_date: string | null
           login_streak: number
           peak_score: number
@@ -68,6 +118,8 @@ export type Database = {
           display_name?: string | null
           gauntlet_high_score?: number
           id?: string
+          is_plus?: boolean
+          last_active_at?: string | null
           last_login_date?: string | null
           login_streak?: number
           peak_score?: number
@@ -86,6 +138,8 @@ export type Database = {
           display_name?: string | null
           gauntlet_high_score?: number
           id?: string
+          is_plus?: boolean
+          last_active_at?: string | null
           last_login_date?: string | null
           login_streak?: number
           peak_score?: number
@@ -125,6 +179,30 @@ export type Database = {
         }
         Relationships: []
       }
+      score_comments: {
+        Row: {
+          author_id: string
+          comment: string
+          created_at: string
+          id: string
+          target_user_id: string
+        }
+        Insert: {
+          author_id: string
+          comment: string
+          created_at?: string
+          id?: string
+          target_user_id: string
+        }
+        Update: {
+          author_id?: string
+          comment?: string
+          created_at?: string
+          id?: string
+          target_user_id?: string
+        }
+        Relationships: []
+      }
       score_history: {
         Row: {
           brain_score: number
@@ -160,6 +238,8 @@ export type Database = {
           brain_score: number | null
           display_name: string | null
           id: string | null
+          is_plus: boolean | null
+          last_active_at: string | null
           login_streak: number | null
           peak_score: number | null
           selected_outfit: string | null
@@ -171,6 +251,8 @@ export type Database = {
           brain_score?: number | null
           display_name?: string | null
           id?: string | null
+          is_plus?: boolean | null
+          last_active_at?: string | null
           login_streak?: number | null
           peak_score?: number | null
           selected_outfit?: string | null
@@ -182,6 +264,8 @@ export type Database = {
           brain_score?: number | null
           display_name?: string | null
           id?: string | null
+          is_plus?: boolean | null
+          last_active_at?: string | null
           login_streak?: number | null
           peak_score?: number | null
           selected_outfit?: string | null

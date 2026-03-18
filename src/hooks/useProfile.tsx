@@ -19,12 +19,10 @@ export function useProfileSync() {
         .single();
       
       if (data) {
-        // Sync cloud → local store
         store.setTheme(data.selected_theme as ThemeColor);
         store.setSelectedOutfit(data.selected_outfit as OutfitId);
         store.setBrainlyEnabled(data.brainly_enabled);
         if (data.brain_score !== store.brainScore || data.peak_score !== store.peakScore) {
-          // Use the higher of cloud vs local
           const bestScore = Math.max(data.brain_score, store.brainScore);
           const bestPeak = Math.max(data.peak_score, store.peakScore);
           store.syncFromCloud(bestScore, bestPeak, data.gauntlet_high_score);
@@ -34,7 +32,7 @@ export function useProfileSync() {
     load();
   }, [user?.id]);
 
-  // Save profile changes to cloud
+  // Save profile changes to cloud (including last_active_at)
   useEffect(() => {
     if (!user) return;
     const timeout = setTimeout(() => {
@@ -47,6 +45,7 @@ export function useProfileSync() {
         peak_score: store.peakScore,
         gauntlet_high_score: store.gauntletHighScore,
         last_login_date: today,
+        last_active_at: new Date().toISOString(),
       }).eq('user_id', user.id).then(() => {});
     }, 1000);
     return () => clearTimeout(timeout);
