@@ -5,9 +5,11 @@ import { DailyRewards } from '@/components/DailyRewards';
 import { QuestionOfTheDay } from '@/components/QuestionOfTheDay';
 import { DailyBrainTest } from '@/components/DailyBrainTest';
 import { ScoreInsights } from '@/components/ScoreInsights';
+import { BrainAge } from '@/components/BrainAge';
+import { WeaknessTrainer } from '@/components/WeaknessTrainer';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
-import { Battery, Brain, Zap, TrendingUp, Share2 } from 'lucide-react';
+import { Battery, Brain, Zap, TrendingUp, Share2, Flame } from 'lucide-react';
 
 const TIERS = [
   { name: 'Smooth Brain', min: 0, max: 549, multiplier: '1x', color: 'text-muted-foreground' },
@@ -28,7 +30,7 @@ function getNextTier(score: number) {
 }
 
 export function DashboardPage() {
-  const { brainScore, gameResults, saveToHistory, resetDay, brainLevel, peakScore } = useGameStore();
+  const { brainScore, gameResults, saveToHistory, resetDay, brainLevel, peakScore, nextMultiplier } = useGameStore();
   const [testDone, setTestDone] = useState(false);
   const { user } = useAuth();
   const testsRun = gameResults.length;
@@ -38,9 +40,9 @@ export function DashboardPage() {
   const tierProgress = nextTier ? ((brainScore - currentTier.min) / (nextTier.min - currentTier.min)) * 100 : 100;
 
   const shareScore = () => {
-    const text = `🧠 My BrainScore is ${brainScore} — ${currentTier.name} (${currentTier.multiplier})!\nPeak: ${peakScore}\nhttps://brainscoretm.lovable.app`;
+    const text = `🧠 My Brainly Score is ${brainScore} — ${currentTier.name} (${currentTier.multiplier})!\nPeak: ${peakScore}\nhttps://brainscoretm.lovable.app`;
     if (navigator.share) {
-      navigator.share({ title: 'BrainScore™', text, url: 'https://brainscoretm.lovable.app' });
+      navigator.share({ title: 'Brainly', text, url: 'https://brainscoretm.lovable.app' });
     } else {
       navigator.clipboard.writeText(text);
     }
@@ -50,8 +52,17 @@ export function DashboardPage() {
     <div className="space-y-4 animate-slide-up">
       <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <Brain className="h-3.5 w-3.5" />
-        Today · BrainScore Card
+        Today · Brainly Card
       </div>
+
+      {/* Active multiplier indicator */}
+      {nextMultiplier > 1 && (
+        <div className="rounded-xl border border-warning/40 bg-warning/10 p-3 flex items-center gap-2 animate-pulse">
+          <Flame className="h-4 w-4 text-warning" />
+          <span className="text-sm font-bold text-warning">{nextMultiplier}x Multiplier Active!</span>
+          <span className="text-xs text-muted-foreground ml-auto">Applied to next game</span>
+        </div>
+      )}
 
       {/* Daily Brain Test - First thing user sees */}
       <DailyBrainTest onComplete={() => setTestDone(true)} />
@@ -59,8 +70,14 @@ export function DashboardPage() {
       {/* Daily Rewards */}
       <DailyRewards />
 
+      {/* Brain Age */}
+      <BrainAge />
+
       {/* Score Insights */}
       <ScoreInsights />
+
+      {/* Weakness Trainer */}
+      <WeaknessTrainer onStartGame={() => {}} />
 
       {/* Score Card */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-lg">

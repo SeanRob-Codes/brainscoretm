@@ -69,9 +69,9 @@ export default function Index() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-accent font-display text-sm font-extrabold text-accent-foreground">
-              BS
+              B
             </div>
-            <span className="font-display text-sm font-bold tracking-[0.15em] uppercase text-foreground">BrainScore™</span>
+            <span className="font-display text-sm font-bold tracking-[0.15em] uppercase text-foreground">Brainly™</span>
           </div>
           <div className="flex items-center gap-2">
             <BrainlyAvatar size={32} className="opacity-80" />
