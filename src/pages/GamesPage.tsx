@@ -514,17 +514,40 @@ const GAME_DEFS = [
 export function GamesPage() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [subject, setSubject] = useState('general');
-  const { addGameResult, gameResults, brainlyEnabled } = useGameStore();
+  const { addGameResult, gameResults, brainlyEnabled, nextMultiplier, setNextMultiplier } = useGameStore();
   const [brainlyMsg, setBrainlyMsg] = useState<string | null>(null);
   const [lastFinish, setLastFinish] = useState<{ game: string; score: number } | null>(null);
+  const [showLootBox, setShowLootBox] = useState(false);
+  const [comboStreak, setComboStreak] = useState(0);
 
-  const handleFinish = (gameId: string, score: number) => {
-    addGameResult({ game: gameId, score, date: new Date().toISOString() });
-    setLastFinish({ game: gameId, score });
+  const handleFinish = (gameId: string, rawScore: number) => {
+    // Apply multipliers
+    const comboMult = getComboMultiplier(comboStreak);
+    const totalMult = nextMultiplier * comboMult;
+    const finalScore = Math.round(rawScore * totalMult);
+    
+    addGameResult({ game: gameId, score: finalScore, date: new Date().toISOString(), detail: totalMult > 1 ? `${totalMult}x multiplier` : undefined });
+    setLastFinish({ game: gameId, score: finalScore });
+    
+    // Reset loot box multiplier after use
+    if (nextMultiplier > 1) setNextMultiplier(1);
+    
+    // Update combo streak
+    if (rawScore > 50) {
+      setComboStreak(s => s + 1);
+    } else {
+      setComboStreak(0);
+    }
+
+    // Random loot box chance (30% after game)
+    if (Math.random() < 0.3) {
+      setTimeout(() => setShowLootBox(true), 800);
+    }
+
     if (brainlyEnabled) {
       const msgs = [
-        score > 150 ? "🔥 Beast mode! That was impressive." : "Not bad! You're warming up.",
-        score > 100 ? "Your neurons are buzzing!" : "Keep grinding, you'll get there.",
+        finalScore > 150 ? "🔥 Beast mode! That was impressive." : "Not bad! You're warming up.",
+        finalScore > 100 ? "Your neurons are buzzing!" : "Keep grinding, you'll get there.",
         "Brainly approves. 🧠",
       ];
       setBrainlyMsg(msgs[Math.floor(Math.random() * msgs.length)]);
@@ -555,6 +578,21 @@ export function GamesPage() {
         <Gamepad2 className="h-3.5 w-3.5" />
         Mini Cognitive Drills
       </div>
+
+      {/* Combo Indicator */}
+      {comboStreak >= 2 && (
+        <div className="flex justify-center">
+          <ComboIndicator streak={comboStreak} multiplier={getComboMultiplier(comboStreak)} />
+        </div>
+      )}
+
+      {/* Active Multiplier */}
+      {nextMultiplier > 1 && (
+        <div className="rounded-xl border border-warning/40 bg-warning/10 p-3 flex items-center gap-2 animate-pulse">
+          <Flame className="h-4 w-4 text-warning" />
+          <span className="text-sm font-bold text-warning">{nextMultiplier}x Loot Box Multiplier Active!</span>
+        </div>
+      )}
 
       {/* Subject Selector */}
       <SubjectSelector selected={subject} onSelect={setSubject} />
@@ -608,6 +646,9 @@ export function GamesPage() {
           );
         })}
       </div>
+
+      {/* Loot Box */}
+      <LootBox show={showLootBox} onClose={() => setShowLootBox(false)} gameScore={lastFinish?.score || 0} />
     </div>
   );
 }
