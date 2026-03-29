@@ -61,6 +61,10 @@ interface GameStore {
   gauntletHighScore: number;
   setGauntletHighScore: (s: number) => void;
   
+  // Multiplier
+  nextMultiplier: number;
+  setNextMultiplier: (m: number) => void;
+  
   // Helpers
   resetDay: () => void;
   getUnlockedOutfits: () => OutfitId[];
@@ -117,7 +121,9 @@ export const useGameStore = create<GameStore>()(
       },
       gauntletHighScore: 0,
       setGauntletHighScore: (s) => set({ gauntletHighScore: Math.max(s, get().gauntletHighScore) }),
-      resetDay: () => set({ gameResults: [], brainScore: 500, brainLevel: 'Smooth Brain' }),
+      nextMultiplier: 1,
+      setNextMultiplier: (m) => set({ nextMultiplier: m }),
+      resetDay: () => set({ gameResults: [], brainScore: 500, brainLevel: 'Smooth Brain', nextMultiplier: 1 }),
       syncFromCloud: (score, peak, gauntletHigh) => set({
         brainScore: score,
         peakScore: peak,
