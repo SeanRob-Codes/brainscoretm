@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { FunComparison } from '@/components/FunComparison';
 import { SubjectSelector } from '@/components/SubjectSelector';
-import { Zap, Brain, Puzzle, Palette, Grid3X3, Type, Timer, Trophy, ArrowRight, RotateCcw, Gamepad2 } from 'lucide-react';
+import { LootBox } from '@/components/LootBox';
+import { ComboIndicator, getComboMultiplier } from '@/components/ComboIndicator';
+import { Zap, Brain, Puzzle, Palette, Grid3X3, Type, Timer, Trophy, ArrowRight, RotateCcw, Gamepad2, Flame } from 'lucide-react';
 
 // ===== SUBJECT-BASED QUESTION BANKS =====
 const LOGIC_BY_SUBJECT: Record<string, { q: string; choices: string[]; answer: string }[]> = {
