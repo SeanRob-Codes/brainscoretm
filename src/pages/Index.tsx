@@ -64,6 +64,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
+      {showOnboarding && <OnboardingFlow onComplete={() => setShowOnboarding(false)} />}
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-md">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
