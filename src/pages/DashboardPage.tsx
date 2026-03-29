@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { ScoreCircle } from '@/components/ScoreCircle';
 import { BrainlyAvatar } from '@/components/BrainlyAvatar';
 import { DailyRewards } from '@/components/DailyRewards';
 import { QuestionOfTheDay } from '@/components/QuestionOfTheDay';
+import { DailyBrainTest } from '@/components/DailyBrainTest';
+import { ScoreInsights } from '@/components/ScoreInsights';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
 import { Battery, Brain, Zap, TrendingUp, Share2 } from 'lucide-react';
@@ -26,6 +29,7 @@ function getNextTier(score: number) {
 
 export function DashboardPage() {
   const { brainScore, gameResults, saveToHistory, resetDay, brainLevel, peakScore } = useGameStore();
+  const [testDone, setTestDone] = useState(false);
   const { user } = useAuth();
   const testsRun = gameResults.length;
   const fatigue = Math.min(100, testsRun * 12);
@@ -49,8 +53,14 @@ export function DashboardPage() {
         Today · BrainScore Card
       </div>
 
+      {/* Daily Brain Test - First thing user sees */}
+      <DailyBrainTest onComplete={() => setTestDone(true)} />
+
       {/* Daily Rewards */}
       <DailyRewards />
+
+      {/* Score Insights */}
+      <ScoreInsights />
 
       {/* Score Card */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-lg">

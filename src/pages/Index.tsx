@@ -3,6 +3,7 @@ import { BottomNav, type TabId } from '@/components/BottomNav';
 import { BrainlyPanel } from '@/components/BrainlyPanel';
 import { BrainlyAvatar } from '@/components/BrainlyAvatar';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import { OnboardingFlow } from '@/components/OnboardingFlow';
 import { DashboardPage } from './DashboardPage';
 import { GamesPage } from './GamesPage';
 import { GauntletPage } from './GauntletPage';
@@ -12,13 +13,31 @@ import { PlusPage } from './PlusPage';
 import { SettingsPage } from './SettingsPage';
 import { useGameStore } from '@/store/gameStore';
 import { useProfileSync } from '@/hooks/useProfile';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function Index() {
   const [tab, setTab] = useState<TabId>('dashboard');
   const [brainlyOpen, setBrainlyOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { theme, brainlyEnabled } = useGameStore();
+  const { user } = useAuth();
 
   useProfileSync();
+
+  // Check if onboarding is needed
+  useEffect(() => {
+    if (!user) return;
+    supabase.from('profiles')
+      .select('onboarding_complete')
+      .eq('user_id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data && !data.onboarding_complete) {
+          setShowOnboarding(true);
+        }
+      });
+  }, [user]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -45,6 +64,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background">
+      {showOnboarding && <OnboardingFlow onComplete={() => setShowOnboarding(false)} />}
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-md">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
