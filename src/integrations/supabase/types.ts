@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      daily_brain_tests: {
+        Row: {
+          challenges_completed: number
+          created_at: string
+          id: string
+          score: number
+          test_date: string
+          user_id: string
+        }
+        Insert: {
+          challenges_completed?: number
+          created_at?: string
+          id?: string
+          score?: number
+          test_date?: string
+          user_id: string
+        }
+        Update: {
+          challenges_completed?: number
+          created_at?: string
+          id?: string
+          score?: number
+          test_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_rewards: {
         Row: {
           claimed_date: string
@@ -97,17 +124,21 @@ export type Database = {
           created_at: string
           display_name: string | null
           gauntlet_high_score: number
+          goals: string[] | null
           id: string
           is_plus: boolean
           last_active_at: string | null
           last_login_date: string | null
           login_streak: number
+          onboarding_complete: boolean
           peak_score: number
           selected_outfit: string
           selected_subject: string
           selected_theme: string
+          sleep_hours: string | null
           updated_at: string
           user_id: string
+          user_type: string | null
           username: string | null
         }
         Insert: {
@@ -117,17 +148,21 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           gauntlet_high_score?: number
+          goals?: string[] | null
           id?: string
           is_plus?: boolean
           last_active_at?: string | null
           last_login_date?: string | null
           login_streak?: number
+          onboarding_complete?: boolean
           peak_score?: number
           selected_outfit?: string
           selected_subject?: string
           selected_theme?: string
+          sleep_hours?: string | null
           updated_at?: string
           user_id: string
+          user_type?: string | null
           username?: string | null
         }
         Update: {
@@ -137,17 +172,21 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           gauntlet_high_score?: number
+          goals?: string[] | null
           id?: string
           is_plus?: boolean
           last_active_at?: string | null
           last_login_date?: string | null
           login_streak?: number
+          onboarding_complete?: boolean
           peak_score?: number
           selected_outfit?: string
           selected_subject?: string
           selected_theme?: string
+          sleep_hours?: string | null
           updated_at?: string
           user_id?: string
+          user_type?: string | null
           username?: string | null
         }
         Relationships: []
