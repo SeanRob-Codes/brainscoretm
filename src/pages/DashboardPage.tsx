@@ -40,9 +40,9 @@ export function DashboardPage() {
   const tierProgress = nextTier ? ((brainScore - currentTier.min) / (nextTier.min - currentTier.min)) * 100 : 100;
 
   const shareScore = () => {
-    const text = `🧠 My Brainly Score is ${brainScore} — ${currentTier.name} (${currentTier.multiplier})!\nPeak: ${peakScore}\nhttps://brainscoretm.lovable.app`;
+    const text = `🧠 My BrainScore is ${brainScore} — ${currentTier.name} (${currentTier.multiplier})!\nPeak: ${peakScore}\nhttps://brainscoretm.lovable.app`;
     if (navigator.share) {
-      navigator.share({ title: 'Brainly', text, url: 'https://brainscoretm.lovable.app' });
+      navigator.share({ title: 'BrainScore™', text, url: 'https://brainscoretm.lovable.app' });
     } else {
       navigator.clipboard.writeText(text);
     }
@@ -52,7 +52,7 @@ export function DashboardPage() {
     <div className="space-y-4 animate-slide-up">
       <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
         <Brain className="h-3.5 w-3.5" />
-        Today · Brainly Card
+        Today · BrainScore Card
       </div>
 
       {/* Active multiplier indicator */}
@@ -187,7 +187,7 @@ export function DashboardPage() {
         <BrainlyAvatar size={56} />
         <div>
           <span className="font-display text-sm font-bold tracking-wider text-accent">{brainLevel}</span>
-          <p className="text-xs text-muted-foreground mt-0.5">Tap Brainly to chat with AI. Unlock outfits in the Outfitter!</p>
+          <p className="text-xs text-muted-foreground mt-0.5">Tap BrainlyElla to chat with AI. Unlock outfits in the Outfitter!</p>
         </div>
       </div>
     </div>
