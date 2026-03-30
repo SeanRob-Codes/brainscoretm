@@ -72,13 +72,13 @@ export function SettingsPage() {
         </div>
       </div>
       
-      {/* Brainly Toggle */}
+      {/* BrainlyElla Toggle */}
       <div className="rounded-xl border border-border bg-card p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Bot className="h-4 w-4 text-accent" />
             <div>
-              <span className="font-display text-xs font-bold tracking-wider">Brainly Mode</span>
+              <span className="font-display text-xs font-bold tracking-wider">BrainlyElla AI</span>
               <p className="text-[11px] text-muted-foreground mt-0.5">Toggle AI comments & auto messages</p>
             </div>
           </div>
@@ -97,8 +97,8 @@ export function SettingsPage() {
           <div className="flex items-center gap-2">
             <Shirt className="h-4 w-4 text-accent" />
             <div>
-              <span className="font-display text-xs font-bold tracking-wider">Brainly Outfitter</span>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Customize your Brainly avatar</p>
+              <span className="font-display text-xs font-bold tracking-wider">BrainlyElla Outfitter</span>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Customize your BrainlyElla avatar</p>
             </div>
           </div>
           <button
