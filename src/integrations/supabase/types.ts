@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      boss_challenges: {
+        Row: {
+          completed: boolean
+          created_at: string
+          id: string
+          score: number
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          score?: number
+          user_id: string
+          week_start?: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          id?: string
+          score?: number
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
+      challenges: {
+        Row: {
+          challenger_id: string
+          challenger_score: number | null
+          completed_at: string | null
+          created_at: string
+          game_type: string
+          id: string
+          opponent_id: string
+          opponent_score: number | null
+          status: string
+          winner_id: string | null
+        }
+        Insert: {
+          challenger_id: string
+          challenger_score?: number | null
+          completed_at?: string | null
+          created_at?: string
+          game_type?: string
+          id?: string
+          opponent_id: string
+          opponent_score?: number | null
+          status?: string
+          winner_id?: string | null
+        }
+        Update: {
+          challenger_id?: string
+          challenger_score?: number | null
+          completed_at?: string | null
+          created_at?: string
+          game_type?: string
+          id?: string
+          opponent_id?: string
+          opponent_score?: number | null
+          status?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
       daily_brain_tests: {
         Row: {
           challenges_completed: number
@@ -266,6 +332,36 @@ export type Database = {
           games_played?: number
           id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_leagues: {
+        Row: {
+          created_at: string
+          games_played: number
+          id: string
+          league: string
+          user_id: string
+          week_start: string
+          weekly_score: number
+        }
+        Insert: {
+          created_at?: string
+          games_played?: number
+          id?: string
+          league?: string
+          user_id: string
+          week_start?: string
+          weekly_score?: number
+        }
+        Update: {
+          created_at?: string
+          games_played?: number
+          id?: string
+          league?: string
+          user_id?: string
+          week_start?: string
+          weekly_score?: number
         }
         Relationships: []
       }
