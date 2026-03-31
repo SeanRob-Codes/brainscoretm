@@ -32,6 +32,7 @@ function AppRoutes() {
       ) : (
         <>
           <Route path="/" element={<Index />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
           <Route path="*" element={<NotFound />} />
         </>
       )}

@@ -81,13 +81,23 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
     setBuying(null);
   };
 
+  const [buyingPack, setBuyingPack] = useState<string | null>(null);
+
   const handleBuyCoins = async (pack: typeof COIN_PACKS[0]) => {
-    // In production this would open Stripe
-    // For now, simulate purchase
-    addCoins(pack.coins);
-    if (user) {
-      await supabase.from('coin_transactions').insert({ user_id: user.id, amount: pack.coins, reason: `Purchased ${pack.coins} coin pack` });
-      await supabase.from('profiles').update({ coins: coins + pack.coins }).eq('user_id', user.id);
+    if (!user) return;
+    setBuyingPack(pack.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-coin-checkout', {
+        body: { packId: pack.id },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (err) {
+      toast.error('Failed to start checkout. Please try again.');
+    } finally {
+      setBuyingPack(null);
     }
   };
 
