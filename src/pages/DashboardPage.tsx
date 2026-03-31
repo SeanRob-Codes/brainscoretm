@@ -66,7 +66,7 @@ export function DashboardPage() {
       <SmartNotifications />
 
       {/* Miss a Day */}
-      <MissADay />
+      <MissADay onDismiss={() => {}} />
 
       {/* Active multiplier indicator */}
       {nextMultiplier > 1 && (
