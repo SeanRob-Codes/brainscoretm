@@ -144,7 +144,8 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
                 <button
                   key={pack.id}
                   onClick={() => handleBuyCoins(pack)}
-                  className={`w-full rounded-xl border-2 p-4 flex items-center gap-4 transition-all hover:border-accent/50 ${pack.popular ? 'border-accent/40 bg-accent/5' : 'border-border bg-secondary'}`}
+                  disabled={buyingPack === pack.id}
+                  className={`w-full rounded-xl border-2 p-4 flex items-center gap-4 transition-all hover:border-accent/50 disabled:opacity-60 ${pack.popular ? 'border-accent/40 bg-accent/5' : 'border-border bg-secondary'}`}
                 >
                   <div className="rounded-lg bg-warning/20 p-2.5">
                     <Coins className="h-6 w-6 text-warning" />
