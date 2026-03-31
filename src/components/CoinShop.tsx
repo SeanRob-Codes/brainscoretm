@@ -158,7 +158,7 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
                     </div>
                     <span className="text-xs text-muted-foreground">BrainCoins</span>
                   </div>
-                  <span className="font-display text-sm font-bold text-accent">{pack.price}</span>
+                  {buyingPack === pack.id ? <Loader2 className="h-4 w-4 animate-spin text-accent" /> : <span className="font-display text-sm font-bold text-accent">{pack.price}</span>}
                 </button>
               ))}
             </div>
