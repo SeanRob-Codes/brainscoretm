@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useGameStore } from '@/store/gameStore';
+import { ChallengeSystem } from '@/components/ChallengeSystem';
+import { WeeklyLeague } from '@/components/WeeklyLeague';
+import { LiveCompetition } from '@/components/LiveCompetition';
 import {
   Users, Share2, Copy, Check, MessageSquare, Trophy, Flame,
-  Search, UserPlus, UserCheck, Heart, MessageCircle, Send, X, Clock, Zap
+  Search, UserPlus, UserCheck, Heart, MessageCircle, Send, X, Clock, Zap, Swords, Crown
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -37,7 +40,7 @@ interface Friendship {
   created_at: string;
 }
 
-type SocialTab = 'feed' | 'search' | 'friends' | 'share';
+type SocialTab = 'feed' | 'search' | 'friends' | 'challenges' | 'leagues' | 'live' | 'share';
 
 export function SocialPage() {
   const { brainScore, peakScore, brainLevel, gauntletHighScore } = useGameStore();
@@ -353,12 +356,12 @@ export function SocialPage() {
       </div>
 
       {/* Social Sub-tabs */}
-      <div className="flex gap-1.5">
-        {([['feed', 'Feed'], ['search', 'Find'], ['friends', 'Friends'], ['share', 'Share']] as const).map(([id, label]) => (
+      <div className="flex gap-1 overflow-x-auto hide-scrollbar">
+        {([['feed', 'Feed'], ['search', 'Find'], ['friends', 'Friends'], ['challenges', '1v1'], ['leagues', 'League'], ['live', 'Live'], ['share', 'Share']] as const).map(([id, label]) => (
           <button
             key={id}
             onClick={() => setSocialTab(id)}
-            className={`flex-1 rounded-xl border py-2 text-[11px] font-bold uppercase tracking-wider transition-all
+            className={`rounded-xl border py-2 px-3 text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap
               ${socialTab === id ? 'gradient-accent border-accent text-accent-foreground' : 'border-border text-muted-foreground hover:text-foreground'}`}
           >
             {label}
@@ -516,6 +519,15 @@ export function SocialPage() {
           )}
         </div>
       )}
+
+      {/* Challenges Tab */}
+      {socialTab === 'challenges' && <ChallengeSystem />}
+
+      {/* Weekly League Tab */}
+      {socialTab === 'leagues' && <WeeklyLeague />}
+
+      {/* Live Competition Tab */}
+      {socialTab === 'live' && <LiveCompetition />}
 
       {/* Share Tab */}
       {socialTab === 'share' && (

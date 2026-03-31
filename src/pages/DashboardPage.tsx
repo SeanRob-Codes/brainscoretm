@@ -7,6 +7,13 @@ import { DailyBrainTest } from '@/components/DailyBrainTest';
 import { ScoreInsights } from '@/components/ScoreInsights';
 import { BrainAge } from '@/components/BrainAge';
 import { WeaknessTrainer } from '@/components/WeaknessTrainer';
+import { SmartNotifications } from '@/components/SmartNotifications';
+import { AvatarEvolution } from '@/components/AvatarEvolution';
+import { LifetimeProgress } from '@/components/LifetimeProgress';
+import { MissADay } from '@/components/MissADay';
+import { BrainScoreID } from '@/components/BrainScoreID';
+import { PerformanceGraphs } from '@/components/PerformanceGraphs';
+import { BossChallenge } from '@/components/BossChallenge';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
 import { Battery, Brain, Zap, TrendingUp, Share2, Flame } from 'lucide-react';
@@ -55,6 +62,12 @@ export function DashboardPage() {
         Today · BrainScore Card
       </div>
 
+      {/* Smart Notifications */}
+      <SmartNotifications />
+
+      {/* Miss a Day */}
+      <MissADay onDismiss={() => {}} />
+
       {/* Active multiplier indicator */}
       {nextMultiplier > 1 && (
         <div className="rounded-xl border border-warning/40 bg-warning/10 p-3 flex items-center gap-2 animate-pulse">
@@ -70,14 +83,29 @@ export function DashboardPage() {
       {/* Daily Rewards */}
       <DailyRewards />
 
+      {/* Boss Challenge */}
+      <BossChallenge />
+
       {/* Brain Age */}
       <BrainAge />
+
+      {/* Avatar Evolution */}
+      <AvatarEvolution />
 
       {/* Score Insights */}
       <ScoreInsights />
 
+      {/* BrainScore ID Card */}
+      <BrainScoreID />
+
       {/* Weakness Trainer */}
       <WeaknessTrainer onStartGame={() => {}} />
+
+      {/* Performance Graphs */}
+      <PerformanceGraphs />
+
+      {/* Lifetime Progress */}
+      <LifetimeProgress />
 
       {/* Score Card */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-lg">
