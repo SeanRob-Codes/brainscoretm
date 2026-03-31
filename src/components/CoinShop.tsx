@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Coins, ShoppingCart, Sparkles, Clock, Crown, Zap, Shield, Star, Heart, X, Tag } from 'lucide-react';
+import { Coins, ShoppingCart, Sparkles, Clock, Crown, Zap, Shield, Star, Heart, X, Tag, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const COIN_PACKS = [
   { id: 'pack-100', coins: 100, price: '$0.99', popular: false },
@@ -80,13 +81,23 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
     setBuying(null);
   };
 
+  const [buyingPack, setBuyingPack] = useState<string | null>(null);
+
   const handleBuyCoins = async (pack: typeof COIN_PACKS[0]) => {
-    // In production this would open Stripe
-    // For now, simulate purchase
-    addCoins(pack.coins);
-    if (user) {
-      await supabase.from('coin_transactions').insert({ user_id: user.id, amount: pack.coins, reason: `Purchased ${pack.coins} coin pack` });
-      await supabase.from('profiles').update({ coins: coins + pack.coins }).eq('user_id', user.id);
+    if (!user) return;
+    setBuyingPack(pack.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-coin-checkout', {
+        body: { packId: pack.id },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, '_blank');
+      }
+    } catch (err) {
+      toast.error('Failed to start checkout. Please try again.');
+    } finally {
+      setBuyingPack(null);
     }
   };
 
@@ -133,7 +144,8 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
                 <button
                   key={pack.id}
                   onClick={() => handleBuyCoins(pack)}
-                  className={`w-full rounded-xl border-2 p-4 flex items-center gap-4 transition-all hover:border-accent/50 ${pack.popular ? 'border-accent/40 bg-accent/5' : 'border-border bg-secondary'}`}
+                  disabled={buyingPack === pack.id}
+                  className={`w-full rounded-xl border-2 p-4 flex items-center gap-4 transition-all hover:border-accent/50 disabled:opacity-60 ${pack.popular ? 'border-accent/40 bg-accent/5' : 'border-border bg-secondary'}`}
                 >
                   <div className="rounded-lg bg-warning/20 p-2.5">
                     <Coins className="h-6 w-6 text-warning" />
@@ -146,7 +158,7 @@ export function CoinShop({ open, onClose }: { open: boolean; onClose: () => void
                     </div>
                     <span className="text-xs text-muted-foreground">BrainCoins</span>
                   </div>
-                  <span className="font-display text-sm font-bold text-accent">{pack.price}</span>
+                  {buyingPack === pack.id ? <Loader2 className="h-4 w-4 animate-spin text-accent" /> : <span className="font-display text-sm font-bold text-accent">{pack.price}</span>}
                 </button>
               ))}
             </div>
