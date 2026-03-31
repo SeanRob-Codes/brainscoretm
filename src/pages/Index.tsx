@@ -5,6 +5,8 @@ import { BrainlyAvatar } from '@/components/BrainlyAvatar';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { OnboardingFlow } from '@/components/OnboardingFlow';
 import { AudioSystem } from '@/components/AudioSystem';
+import { CoinShop } from '@/components/CoinShop';
+import { LivesLockScreen } from '@/components/LivesSystem';
 import { DashboardPage } from './DashboardPage';
 import { GamesPage } from './GamesPage';
 import { GauntletPage } from './GauntletPage';
@@ -21,12 +23,12 @@ export default function Index() {
   const [tab, setTab] = useState<TabId>('dashboard');
   const [brainlyOpen, setBrainlyOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
-  const { theme, brainlyEnabled } = useGameStore();
+  const [shopOpen, setShopOpen] = useState(false);
+  const { theme, brainlyEnabled, lives } = useGameStore();
   const { user } = useAuth();
 
   useProfileSync();
 
-  // Check if onboarding is needed
   useEffect(() => {
     if (!user) return;
     supabase.from('profiles')
@@ -66,21 +68,36 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-background">
       {showOnboarding && <OnboardingFlow onComplete={() => setShowOnboarding(false)} />}
+      
+      {/* Lives Lock Screen */}
+      {lives <= 0 && (tab === 'games' || tab === 'gauntlet') && (
+        <LivesLockScreen 
+          onRefill={() => {}} 
+          onBuyCoins={() => setShopOpen(true)} 
+        />
+      )}
+
+      {/* Coin Shop */}
+      <CoinShop open={shopOpen} onClose={() => setShopOpen(false)} />
+
       <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-md">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl gradient-accent font-display text-sm font-extrabold text-accent-foreground">
+        <div className="flex items-center justify-between px-4 py-2.5">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-accent font-display text-xs font-extrabold text-accent-foreground">
               B
             </div>
-            <span className="font-display text-sm font-bold tracking-[0.15em] uppercase text-foreground">BrainScore™</span>
+            <span className="font-display text-xs font-bold tracking-[0.12em] uppercase text-foreground">BrainScore™</span>
           </div>
           <div className="flex items-center gap-2">
-            <BrainlyAvatar size={32} className="opacity-80" />
+            <button onClick={() => setShopOpen(true)} className="text-[10px] font-display font-bold text-warning flex items-center gap-1 rounded-full bg-warning/10 px-2.5 py-1 hover:bg-warning/20 transition-colors">
+              🛒 Shop
+            </button>
+            <BrainlyAvatar size={28} className="opacity-80" />
           </div>
         </div>
       </header>
 
-      <main className="px-4 pb-24 pt-4 transition-all duration-300 ease-out">
+      <main className="px-3 pb-20 pt-3 transition-all duration-300 ease-out">
         {renderPage()}
       </main>
 
@@ -92,9 +109,9 @@ export default function Index() {
         <>
           <button
             onClick={() => setBrainlyOpen(!brainlyOpen)}
-            className="fixed right-4 bottom-20 z-40 h-14 w-14 rounded-full gradient-accent shadow-lg glow-accent flex items-center justify-center hover:scale-105 transition-transform"
+            className="fixed right-3 bottom-16 z-40 h-12 w-12 rounded-full gradient-accent shadow-lg glow-accent flex items-center justify-center hover:scale-105 transition-transform"
           >
-            <BrainlyAvatar size={36} />
+            <BrainlyAvatar size={30} />
           </button>
           <BrainlyPanel open={brainlyOpen} onClose={() => setBrainlyOpen(false)} />
         </>
