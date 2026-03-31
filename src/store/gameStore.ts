@@ -65,10 +65,36 @@ interface GameStore {
   nextMultiplier: number;
   setNextMultiplier: (m: number) => void;
   
+  // Coins
+  coins: number;
+  addCoins: (amount: number) => void;
+  spendCoins: (amount: number) => boolean;
+  
+  // Lives
+  lives: number;
+  maxLives: number;
+  lastLifeRegenAt: string;
+  loseLife: () => void;
+  refillLives: () => void;
+  regenLives: () => void;
+  
+  // Risk Mode
+  riskMode: boolean;
+  setRiskMode: (v: boolean) => void;
+  
+  // Streak Protection
+  streakProtection: boolean;
+  setStreakProtection: (v: boolean) => void;
+  
+  // Second Chances
+  secondChances: number;
+  addSecondChance: () => void;
+  useSecondChance: () => boolean;
+  
   // Helpers
   resetDay: () => void;
   getUnlockedOutfits: () => OutfitId[];
-  syncFromCloud: (score: number, peak: number, gauntletHigh: number) => void;
+  syncFromCloud: (score: number, peak: number, gauntletHigh: number, coins?: number, lives?: number) => void;
 }
 
 function getBrainLevel(score: number): string {
@@ -95,18 +121,20 @@ export const useGameStore = create<GameStore>()(
       gameResults: [],
       addGameResult: (r) => {
         const results = [...get().gameResults, r];
-        // Recalculate brainScore based on game results
         let bonus = 0;
         results.forEach(g => {
           bonus += Math.round(g.score * 0.15);
         });
         const newScore = Math.min(2000, 500 + bonus);
         const peak = Math.max(get().peakScore, newScore);
+        // Earn coins for playing games
+        const coinsEarned = Math.round(r.score * 0.1) + 5;
         set({
           gameResults: results,
           brainScore: newScore,
           peakScore: peak,
           brainLevel: getBrainLevel(newScore),
+          coins: get().coins + coinsEarned,
         });
       },
       history: [],
@@ -123,12 +151,66 @@ export const useGameStore = create<GameStore>()(
       setGauntletHighScore: (s) => set({ gauntletHighScore: Math.max(s, get().gauntletHighScore) }),
       nextMultiplier: 1,
       setNextMultiplier: (m) => set({ nextMultiplier: m }),
+      
+      // Coins
+      coins: 0,
+      addCoins: (amount) => set({ coins: get().coins + amount }),
+      spendCoins: (amount) => {
+        if (get().coins < amount) return false;
+        set({ coins: get().coins - amount });
+        return true;
+      },
+      
+      // Lives
+      lives: 5,
+      maxLives: 5,
+      lastLifeRegenAt: new Date().toISOString(),
+      loseLife: () => {
+        const { lives, streakProtection } = get();
+        // First mistake of day protection or streak protection
+        if (streakProtection && lives === get().maxLives) return;
+        set({ lives: Math.max(0, lives - 1) });
+      },
+      refillLives: () => set({ lives: get().maxLives, lastLifeRegenAt: new Date().toISOString() }),
+      regenLives: () => {
+        const { lives, maxLives, lastLifeRegenAt } = get();
+        if (lives >= maxLives) return;
+        const elapsed = Date.now() - new Date(lastLifeRegenAt).getTime();
+        const regenInterval = 10 * 60 * 1000; // 10 minutes
+        const livesToAdd = Math.floor(elapsed / regenInterval);
+        if (livesToAdd > 0) {
+          set({
+            lives: Math.min(maxLives, lives + livesToAdd),
+            lastLifeRegenAt: new Date().toISOString(),
+          });
+        }
+      },
+      
+      // Risk Mode
+      riskMode: false,
+      setRiskMode: (v) => set({ riskMode: v }),
+      
+      // Streak Protection
+      streakProtection: false,
+      setStreakProtection: (v) => set({ streakProtection: v }),
+      
+      // Second Chances
+      secondChances: 0,
+      addSecondChance: () => set({ secondChances: get().secondChances + 1 }),
+      useSecondChance: () => {
+        if (get().secondChances <= 0) return false;
+        set({ secondChances: get().secondChances - 1 });
+        return true;
+      },
+      
       resetDay: () => set({ gameResults: [], brainScore: 500, brainLevel: 'Smooth Brain', nextMultiplier: 1 }),
-      syncFromCloud: (score, peak, gauntletHigh) => set({
+      syncFromCloud: (score, peak, gauntletHigh, coins, lives) => set({
         brainScore: score,
         peakScore: peak,
         brainLevel: getBrainLevel(score),
         gauntletHighScore: Math.max(gauntletHigh, get().gauntletHighScore),
+        ...(coins !== undefined ? { coins } : {}),
+        ...(lives !== undefined ? { lives } : {}),
       }),
       getUnlockedOutfits: () => {
         const peak = get().peakScore;
