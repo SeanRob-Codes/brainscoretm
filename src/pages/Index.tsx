@@ -4,6 +4,7 @@ import { BrainlyPanel } from '@/components/BrainlyPanel';
 import { BrainlyAvatar } from '@/components/BrainlyAvatar';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { OnboardingFlow } from '@/components/OnboardingFlow';
+import { AudioSystem } from '@/components/AudioSystem';
 import { DashboardPage } from './DashboardPage';
 import { GamesPage } from './GamesPage';
 import { GauntletPage } from './GauntletPage';
@@ -79,12 +80,13 @@ export default function Index() {
         </div>
       </header>
 
-      <main className="px-4 pb-24 pt-4">
+      <main className="px-4 pb-24 pt-4 transition-all duration-300 ease-out">
         {renderPage()}
       </main>
 
       <BottomNav active={tab} onTabChange={setTab} />
       <ScrollToTop />
+      <AudioSystem />
 
       {brainlyEnabled && (
         <>
