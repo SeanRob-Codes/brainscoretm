@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Coins, ShoppingCart, Sparkles, Clock, Crown, Zap, Shield, Star, Heart, X, Tag } from 'lucide-react';
+import { Coins, ShoppingCart, Sparkles, Clock, Crown, Zap, Shield, Star, Heart, X, Tag, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const COIN_PACKS = [
   { id: 'pack-100', coins: 100, price: '$0.99', popular: false },
