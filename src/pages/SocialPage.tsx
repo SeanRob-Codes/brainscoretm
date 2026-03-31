@@ -40,7 +40,7 @@ interface Friendship {
   created_at: string;
 }
 
-type SocialTab = 'feed' | 'search' | 'friends' | 'share';
+type SocialTab = 'feed' | 'search' | 'friends' | 'challenges' | 'leagues' | 'live' | 'share';
 
 export function SocialPage() {
   const { brainScore, peakScore, brainLevel, gauntletHighScore } = useGameStore();
