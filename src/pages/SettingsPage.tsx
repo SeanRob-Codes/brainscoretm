@@ -133,6 +133,21 @@ export function SettingsPage() {
           </button>
         </div>
       </div>
+
+      {/* BrainScore ID */}
+      <BrainScoreID />
+      
+      {/* Avatar Evolution */}
+      <AvatarEvolution />
+      
+      {/* Boss Challenge */}
+      <BossChallenge />
+      
+      {/* Performance Graphs */}
+      <PerformanceGraphs />
+      
+      {/* Lifetime Progress */}
+      <LifetimeProgress />
       
       <OutfitSelector open={outfitOpen} onClose={() => setOutfitOpen(false)} />
     </div>
