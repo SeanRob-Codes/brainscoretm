@@ -584,11 +584,29 @@ export function GamesPage() {
   };
 
   return (
-    <div className="space-y-4 animate-slide-up">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        <Gamepad2 className="h-3.5 w-3.5" />
-        Mini Cognitive Drills
+    <div className="space-y-3 animate-slide-up max-w-lg mx-auto">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <Gamepad2 className="h-3.5 w-3.5" />
+          Cognitive Drills
+        </div>
+        {/* Risk Mode Toggle */}
+        <button
+          onClick={() => setRiskMode(!riskMode)}
+          className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider transition-all
+            ${riskMode ? 'bg-destructive/20 border border-destructive/40 text-destructive animate-pulse' : 'border border-border text-muted-foreground hover:text-foreground'}`}
+        >
+          <Flame className="h-3 w-3" />
+          {riskMode ? 'Risk: ON (2.5x)' : 'Risk Mode'}
+        </button>
       </div>
+
+      {/* Lives Warning */}
+      {lives <= 1 && lives > 0 && (
+        <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-2.5 flex items-center gap-2 text-xs text-destructive font-medium animate-pulse">
+          ⚠️ Last life! Play carefully or wait for recovery.
+        </div>
+      )}
 
       {/* Combo Indicator */}
       {comboStreak >= 2 && (
@@ -599,9 +617,9 @@ export function GamesPage() {
 
       {/* Active Multiplier */}
       {nextMultiplier > 1 && (
-        <div className="rounded-xl border border-warning/40 bg-warning/10 p-3 flex items-center gap-2 animate-pulse">
-          <Flame className="h-4 w-4 text-warning" />
-          <span className="text-sm font-bold text-warning">{nextMultiplier}x Loot Box Multiplier Active!</span>
+        <div className="rounded-xl border border-warning/40 bg-warning/10 p-2.5 flex items-center gap-2">
+          <Flame className="h-3.5 w-3.5 text-warning" />
+          <span className="text-xs font-bold text-warning">{nextMultiplier}x Multiplier Active!</span>
         </div>
       )}
 
