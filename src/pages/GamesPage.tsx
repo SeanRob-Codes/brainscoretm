@@ -516,32 +516,41 @@ const GAME_DEFS = [
 export function GamesPage() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [subject, setSubject] = useState('general');
-  const { addGameResult, gameResults, brainlyEnabled, nextMultiplier, setNextMultiplier } = useGameStore();
+  const { addGameResult, gameResults, brainlyEnabled, nextMultiplier, setNextMultiplier, lives, loseLife, riskMode, setRiskMode, addCoins } = useGameStore();
   const [brainlyMsg, setBrainlyMsg] = useState<string | null>(null);
   const [lastFinish, setLastFinish] = useState<{ game: string; score: number } | null>(null);
   const [showLootBox, setShowLootBox] = useState(false);
   const [comboStreak, setComboStreak] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
 
   const handleFinish = (gameId: string, rawScore: number) => {
     // Apply multipliers
     const comboMult = getComboMultiplier(comboStreak);
-    const totalMult = nextMultiplier * comboMult;
+    const riskMult = riskMode ? 2.5 : 1;
+    const totalMult = nextMultiplier * comboMult * riskMult;
     const finalScore = Math.round(rawScore * totalMult);
     
-    addGameResult({ game: gameId, score: finalScore, date: new Date().toISOString(), detail: totalMult > 1 ? `${totalMult}x multiplier` : undefined });
+    // Perfect run bonus
+    const perfectBonus = mistakes === 0 ? 20 : 0;
+    if (perfectBonus > 0) addCoins(perfectBonus);
+    
+    addGameResult({ game: gameId, score: finalScore, date: new Date().toISOString(), detail: totalMult > 1 ? `${totalMult.toFixed(1)}x multiplier` : mistakes === 0 ? '🎯 Perfect!' : undefined });
     setLastFinish({ game: gameId, score: finalScore });
     
-    // Reset loot box multiplier after use
-    if (nextMultiplier > 1) setNextMultiplier(1);
+    // Lose a life per mistake (max 2 lost per game)
+    const livesLost = Math.min(2, mistakes);
+    for (let i = 0; i < livesLost; i++) loseLife();
     
-    // Update combo streak
+    if (nextMultiplier > 1) setNextMultiplier(1);
+    if (riskMode) setRiskMode(false);
+    setMistakes(0);
+    
     if (rawScore > 50) {
       setComboStreak(s => s + 1);
     } else {
       setComboStreak(0);
     }
 
-    // Random loot box chance (30% after game)
     if (Math.random() < 0.3) {
       setTimeout(() => setShowLootBox(true), 800);
     }
@@ -549,8 +558,8 @@ export function GamesPage() {
     if (brainlyEnabled) {
       const msgs = [
         finalScore > 150 ? "🔥 Beast mode! That was impressive." : "Not bad! You're warming up.",
-        finalScore > 100 ? "Your neurons are buzzing!" : "Keep grinding, you'll get there.",
-        "Brainly approves. 🧠",
+        mistakes === 0 ? "🎯 PERFECT RUN! +20 bonus coins!" : "Keep grinding, you'll get there.",
+        "BrainlyElla approves. 🧠",
       ];
       setBrainlyMsg(msgs[Math.floor(Math.random() * msgs.length)]);
     }
@@ -575,11 +584,29 @@ export function GamesPage() {
   };
 
   return (
-    <div className="space-y-4 animate-slide-up">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-        <Gamepad2 className="h-3.5 w-3.5" />
-        Mini Cognitive Drills
+    <div className="space-y-3 animate-slide-up max-w-lg mx-auto">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          <Gamepad2 className="h-3.5 w-3.5" />
+          Cognitive Drills
+        </div>
+        {/* Risk Mode Toggle */}
+        <button
+          onClick={() => setRiskMode(!riskMode)}
+          className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider transition-all
+            ${riskMode ? 'bg-destructive/20 border border-destructive/40 text-destructive animate-pulse' : 'border border-border text-muted-foreground hover:text-foreground'}`}
+        >
+          <Flame className="h-3 w-3" />
+          {riskMode ? 'Risk: ON (2.5x)' : 'Risk Mode'}
+        </button>
       </div>
+
+      {/* Lives Warning */}
+      {lives <= 1 && lives > 0 && (
+        <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-2.5 flex items-center gap-2 text-xs text-destructive font-medium animate-pulse">
+          ⚠️ Last life! Play carefully or wait for recovery.
+        </div>
+      )}
 
       {/* Combo Indicator */}
       {comboStreak >= 2 && (
@@ -590,9 +617,9 @@ export function GamesPage() {
 
       {/* Active Multiplier */}
       {nextMultiplier > 1 && (
-        <div className="rounded-xl border border-warning/40 bg-warning/10 p-3 flex items-center gap-2 animate-pulse">
-          <Flame className="h-4 w-4 text-warning" />
-          <span className="text-sm font-bold text-warning">{nextMultiplier}x Loot Box Multiplier Active!</span>
+        <div className="rounded-xl border border-warning/40 bg-warning/10 p-2.5 flex items-center gap-2">
+          <Flame className="h-3.5 w-3.5 text-warning" />
+          <span className="text-xs font-bold text-warning">{nextMultiplier}x Multiplier Active!</span>
         </div>
       )}
 

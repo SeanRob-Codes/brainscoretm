@@ -80,6 +80,30 @@ export type Database = {
         }
         Relationships: []
       }
+      coin_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          reason: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          reason: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          reason?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_brain_tests: {
         Row: {
           challenges_completed: number
@@ -187,6 +211,7 @@ export type Database = {
           avatar_url: string | null
           brain_score: number
           brainly_enabled: boolean
+          coins: number
           created_at: string
           display_name: string | null
           gauntlet_high_score: number
@@ -194,14 +219,18 @@ export type Database = {
           id: string
           is_plus: boolean
           last_active_at: string | null
+          last_life_regen_at: string | null
           last_login_date: string | null
+          lives: number
           login_streak: number
+          max_lives: number
           onboarding_complete: boolean
           peak_score: number
           selected_outfit: string
           selected_subject: string
           selected_theme: string
           sleep_hours: string | null
+          streak_protection: boolean
           updated_at: string
           user_id: string
           user_type: string | null
@@ -211,6 +240,7 @@ export type Database = {
           avatar_url?: string | null
           brain_score?: number
           brainly_enabled?: boolean
+          coins?: number
           created_at?: string
           display_name?: string | null
           gauntlet_high_score?: number
@@ -218,14 +248,18 @@ export type Database = {
           id?: string
           is_plus?: boolean
           last_active_at?: string | null
+          last_life_regen_at?: string | null
           last_login_date?: string | null
+          lives?: number
           login_streak?: number
+          max_lives?: number
           onboarding_complete?: boolean
           peak_score?: number
           selected_outfit?: string
           selected_subject?: string
           selected_theme?: string
           sleep_hours?: string | null
+          streak_protection?: boolean
           updated_at?: string
           user_id: string
           user_type?: string | null
@@ -235,6 +269,7 @@ export type Database = {
           avatar_url?: string | null
           brain_score?: number
           brainly_enabled?: boolean
+          coins?: number
           created_at?: string
           display_name?: string | null
           gauntlet_high_score?: number
@@ -242,14 +277,18 @@ export type Database = {
           id?: string
           is_plus?: boolean
           last_active_at?: string | null
+          last_life_regen_at?: string | null
           last_login_date?: string | null
+          lives?: number
           login_streak?: number
+          max_lives?: number
           onboarding_complete?: boolean
           peak_score?: number
           selected_outfit?: string
           selected_subject?: string
           selected_theme?: string
           sleep_hours?: string | null
+          streak_protection?: boolean
           updated_at?: string
           user_id?: string
           user_type?: string | null
@@ -334,6 +373,74 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      shop_items: {
+        Row: {
+          available_until: string | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image_key: string | null
+          is_limited: boolean
+          is_premium: boolean
+          name: string
+          price: number
+        }
+        Insert: {
+          available_until?: string | null
+          category?: string
+          created_at?: string
+          description: string
+          id?: string
+          image_key?: string | null
+          is_limited?: boolean
+          is_premium?: boolean
+          name: string
+          price: number
+        }
+        Update: {
+          available_until?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_key?: string | null
+          is_limited?: boolean
+          is_premium?: boolean
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
+      user_purchases: {
+        Row: {
+          id: string
+          item_id: string
+          purchased_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          item_id: string
+          purchased_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          item_id?: string
+          purchased_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_purchases_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "shop_items"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       weekly_leagues: {
         Row: {

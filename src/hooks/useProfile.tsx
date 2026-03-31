@@ -22,17 +22,15 @@ export function useProfileSync() {
         store.setTheme(data.selected_theme as ThemeColor);
         store.setSelectedOutfit(data.selected_outfit as OutfitId);
         store.setBrainlyEnabled(data.brainly_enabled);
-        if (data.brain_score !== store.brainScore || data.peak_score !== store.peakScore) {
-          const bestScore = Math.max(data.brain_score, store.brainScore);
-          const bestPeak = Math.max(data.peak_score, store.peakScore);
-          store.syncFromCloud(bestScore, bestPeak, data.gauntlet_high_score);
-        }
+        const bestScore = Math.max(data.brain_score, store.brainScore);
+        const bestPeak = Math.max(data.peak_score, store.peakScore);
+        store.syncFromCloud(bestScore, bestPeak, data.gauntlet_high_score, (data as any).coins, (data as any).lives);
       }
     };
     load();
   }, [user?.id]);
 
-  // Save profile changes to cloud (including last_active_at)
+  // Save profile changes to cloud
   useEffect(() => {
     if (!user) return;
     const timeout = setTimeout(() => {
@@ -46,10 +44,12 @@ export function useProfileSync() {
         gauntlet_high_score: store.gauntletHighScore,
         last_login_date: today,
         last_active_at: new Date().toISOString(),
-      }).eq('user_id', user.id).then(() => {});
+        coins: store.coins,
+        lives: store.lives,
+      } as any).eq('user_id', user.id).then(() => {});
     }, 1000);
     return () => clearTimeout(timeout);
-  }, [user?.id, store.theme, store.selectedOutfit, store.brainlyEnabled, store.brainScore, store.peakScore, store.gauntletHighScore]);
+  }, [user?.id, store.theme, store.selectedOutfit, store.brainlyEnabled, store.brainScore, store.peakScore, store.gauntletHighScore, store.coins, store.lives]);
 }
 
 export function useSaveHistory() {

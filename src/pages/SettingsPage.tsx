@@ -1,8 +1,13 @@
 import { useGameStore, type ThemeColor } from '@/store/gameStore';
 import { useAuth } from '@/hooks/useAuth';
-import { Settings, Palette, Bot, Share2, Shirt, LogOut, User } from 'lucide-react';
+import { Settings, Palette, Bot, Share2, Shirt, LogOut, User, Star, Trophy, BarChart3, Shield } from 'lucide-react';
 import { useState } from 'react';
 import { OutfitSelector } from '@/components/OutfitSelector';
+import { PerformanceGraphs } from '@/components/PerformanceGraphs';
+import { LifetimeProgress } from '@/components/LifetimeProgress';
+import { BrainScoreID } from '@/components/BrainScoreID';
+import { BossChallenge } from '@/components/BossChallenge';
+import { AvatarEvolution } from '@/components/AvatarEvolution';
 
 const THEMES: { id: ThemeColor; label: string }[] = [
   { id: 'red', label: 'Aggressive Red' },
@@ -128,6 +133,21 @@ export function SettingsPage() {
           </button>
         </div>
       </div>
+
+      {/* BrainScore ID */}
+      <BrainScoreID />
+      
+      {/* Avatar Evolution */}
+      <AvatarEvolution />
+      
+      {/* Boss Challenge */}
+      <BossChallenge />
+      
+      {/* Performance Graphs */}
+      <PerformanceGraphs />
+      
+      {/* Lifetime Progress */}
+      <LifetimeProgress />
       
       <OutfitSelector open={outfitOpen} onClose={() => setOutfitOpen(false)} />
     </div>
