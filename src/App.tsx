@@ -8,6 +8,7 @@ import { AuthPage } from "./pages/AuthPage";
 import { ResetPasswordPage } from "./pages/ResetPasswordPage";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage.tsx";
 import { Loader2 } from "lucide-react";
 
 const queryClient = new QueryClient();
