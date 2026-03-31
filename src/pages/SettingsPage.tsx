@@ -8,7 +8,6 @@ import { LifetimeProgress } from '@/components/LifetimeProgress';
 import { BrainScoreID } from '@/components/BrainScoreID';
 import { BossChallenge } from '@/components/BossChallenge';
 import { AvatarEvolution } from '@/components/AvatarEvolution';
-import { OutfitSelector } from '@/components/OutfitSelector';
 
 const THEMES: { id: ThemeColor; label: string }[] = [
   { id: 'red', label: 'Aggressive Red' },
