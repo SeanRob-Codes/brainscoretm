@@ -356,12 +356,12 @@ export function SocialPage() {
       </div>
 
       {/* Social Sub-tabs */}
-      <div className="flex gap-1.5">
-        {([['feed', 'Feed'], ['search', 'Find'], ['friends', 'Friends'], ['share', 'Share']] as const).map(([id, label]) => (
+      <div className="flex gap-1 overflow-x-auto hide-scrollbar">
+        {([['feed', 'Feed'], ['search', 'Find'], ['friends', 'Friends'], ['challenges', '1v1'], ['leagues', 'League'], ['live', 'Live'], ['share', 'Share']] as const).map(([id, label]) => (
           <button
             key={id}
             onClick={() => setSocialTab(id)}
-            className={`flex-1 rounded-xl border py-2 text-[11px] font-bold uppercase tracking-wider transition-all
+            className={`rounded-xl border py-2 px-3 text-[10px] font-bold uppercase tracking-wider transition-all whitespace-nowrap
               ${socialTab === id ? 'gradient-accent border-accent text-accent-foreground' : 'border-border text-muted-foreground hover:text-foreground'}`}
           >
             {label}
