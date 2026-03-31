@@ -516,32 +516,41 @@ const GAME_DEFS = [
 export function GamesPage() {
   const [activeGame, setActiveGame] = useState<string | null>(null);
   const [subject, setSubject] = useState('general');
-  const { addGameResult, gameResults, brainlyEnabled, nextMultiplier, setNextMultiplier } = useGameStore();
+  const { addGameResult, gameResults, brainlyEnabled, nextMultiplier, setNextMultiplier, lives, loseLife, riskMode, setRiskMode, addCoins } = useGameStore();
   const [brainlyMsg, setBrainlyMsg] = useState<string | null>(null);
   const [lastFinish, setLastFinish] = useState<{ game: string; score: number } | null>(null);
   const [showLootBox, setShowLootBox] = useState(false);
   const [comboStreak, setComboStreak] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
 
   const handleFinish = (gameId: string, rawScore: number) => {
     // Apply multipliers
     const comboMult = getComboMultiplier(comboStreak);
-    const totalMult = nextMultiplier * comboMult;
+    const riskMult = riskMode ? 2.5 : 1;
+    const totalMult = nextMultiplier * comboMult * riskMult;
     const finalScore = Math.round(rawScore * totalMult);
     
-    addGameResult({ game: gameId, score: finalScore, date: new Date().toISOString(), detail: totalMult > 1 ? `${totalMult}x multiplier` : undefined });
+    // Perfect run bonus
+    const perfectBonus = mistakes === 0 ? 20 : 0;
+    if (perfectBonus > 0) addCoins(perfectBonus);
+    
+    addGameResult({ game: gameId, score: finalScore, date: new Date().toISOString(), detail: totalMult > 1 ? `${totalMult.toFixed(1)}x multiplier` : mistakes === 0 ? '🎯 Perfect!' : undefined });
     setLastFinish({ game: gameId, score: finalScore });
     
-    // Reset loot box multiplier after use
-    if (nextMultiplier > 1) setNextMultiplier(1);
+    // Lose a life per mistake (max 2 lost per game)
+    const livesLost = Math.min(2, mistakes);
+    for (let i = 0; i < livesLost; i++) loseLife();
     
-    // Update combo streak
+    if (nextMultiplier > 1) setNextMultiplier(1);
+    if (riskMode) setRiskMode(false);
+    setMistakes(0);
+    
     if (rawScore > 50) {
       setComboStreak(s => s + 1);
     } else {
       setComboStreak(0);
     }
 
-    // Random loot box chance (30% after game)
     if (Math.random() < 0.3) {
       setTimeout(() => setShowLootBox(true), 800);
     }
@@ -549,8 +558,8 @@ export function GamesPage() {
     if (brainlyEnabled) {
       const msgs = [
         finalScore > 150 ? "🔥 Beast mode! That was impressive." : "Not bad! You're warming up.",
-        finalScore > 100 ? "Your neurons are buzzing!" : "Keep grinding, you'll get there.",
-        "Brainly approves. 🧠",
+        mistakes === 0 ? "🎯 PERFECT RUN! +20 bonus coins!" : "Keep grinding, you'll get there.",
+        "BrainlyElla approves. 🧠",
       ];
       setBrainlyMsg(msgs[Math.floor(Math.random() * msgs.length)]);
     }
