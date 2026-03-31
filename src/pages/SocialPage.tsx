@@ -520,6 +520,15 @@ export function SocialPage() {
         </div>
       )}
 
+      {/* Challenges Tab */}
+      {socialTab === 'challenges' && <ChallengeSystem />}
+
+      {/* Weekly League Tab */}
+      {socialTab === 'leagues' && <WeeklyLeague />}
+
+      {/* Live Competition Tab */}
+      {socialTab === 'live' && <LiveCompetition />}
+
       {/* Share Tab */}
       {socialTab === 'share' && (
         <div className="space-y-3">
