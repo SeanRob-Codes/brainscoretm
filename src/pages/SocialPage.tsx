@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useGameStore } from '@/store/gameStore';
+import { ChallengeSystem } from '@/components/ChallengeSystem';
+import { WeeklyLeague } from '@/components/WeeklyLeague';
+import { LiveCompetition } from '@/components/LiveCompetition';
 import {
   Users, Share2, Copy, Check, MessageSquare, Trophy, Flame,
-  Search, UserPlus, UserCheck, Heart, MessageCircle, Send, X, Clock, Zap
+  Search, UserPlus, UserCheck, Heart, MessageCircle, Send, X, Clock, Zap, Swords, Crown
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
